@@ -11,9 +11,10 @@ class robot:                               #class item
 
 def read_world_file(N, filename):
     global robot
-    G=np.zeros((N,N))
+    
     list_balls=[]
     
+    size=0
 
     plt.xlim(0, N)
     plt.ylim(0, N)
@@ -39,6 +40,7 @@ def read_world_file(N, filename):
             elif name.isdigit():
                 x, y = map(int, coords[1:-1].split(','))
                 plt.plot(x, y, marker="o", label='balls')
+                size+=1
                 list_balls.append((x,y))
 
     # plt.show()
@@ -50,6 +52,8 @@ def read_world_file(N, filename):
             plt.plot(x_values, y_values, 'b-')  # 'b-' means blue lines
             value = abs(list_balls[i][0] - list_balls[j][0]) + abs(list_balls[i][1] - list_balls[j][1])
             plt.text((list_balls[i][0] + list_balls[j][0])/2, (list_balls[i][1] + list_balls[j][1])/2, str(value))
+
+    G=np.zeros((size,size))
 
     return G,robot,list_balls
 
