@@ -8,6 +8,9 @@ class robot:                               #class item
         self.mv_speed=mv_speed
         self.rot_speed=rot_speed
 
+    def __str__(self):
+        return "The robot is in "+str(self.position)+" in direction "+str(self.direction)+" at a mv speed "+str(self.mv_speed)+" and rot speed "+str(self.rot_speed)
+
 
 def read_world_file(N, filename):
     global robot
