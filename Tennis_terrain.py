@@ -1,13 +1,24 @@
 from matplotlib import pyplot as plt
+import numpy as np
+
+class robot:                               #class item
+    def __init__(self,position,direction=0,mv_speed=0,rot_speed=0):          #id and price are atributes of the item class
+        self.position=position
+        self.direction=direction
+        self.mv_speed=mv_speed
+        self.rot_speed=rot_speed
 
 
 def read_world_file(N, filename):
+    global robot
+    G=np.zeros((N,N))
+    list_balls=[]
+    
 
+    plt.xlim(0, N)
+    plt.ylim(0, N)
     with open(filename, 'r') as f:
 
-        plt.grid()
-        plt.xlim(0, N)
-        plt.ylim(0, N)
         for line in f:
 
             line = line.strip()
@@ -23,25 +34,30 @@ def read_world_file(N, filename):
             if name == 'R':
                 x, y = map(int, coords[1:-1].split(','))
                 plt.plot(x, y, marker="o", label='robot')
+                robot=robot((x,y),0,4)  ###############################################################
 
             elif name.isdigit():
                 x, y = map(int, coords[1:-1].split(','))
-                plt.plot(x, y, marker="o", label='dechet')
+                plt.plot(x, y, marker="o", label='balls')
+                list_balls.append((x,y))
 
-            """
-            elif name == 'X':
-                coords1, coords2 = coords[1:].replace(')','').replace('(','').split(';')#.replace(')',' ').split()
-                x1, y1 = map(int, coords1[1:-1].split(','))
-                x2, y2 = map(int, coords2[1:-1].split(','))
-                for x in range(x1, x2+1):
-                    for y in range(y1, y2+1):
-                        
-            """
-    plt.show()
+    # plt.show()
+    print(len(list_balls))
+    for i in range(len(list_balls)):
+        for j in range(i+1, len(list_balls)):
+            x_values = [list_balls[i][0], list_balls[j][0]]
+            y_values = [list_balls[i][1], list_balls[j][1]]
+            plt.plot(x_values, y_values, 'b-')  # 'b-' means blue lines
+            value = abs(list_balls[i][0] - list_balls[j][0]) + abs(list_balls[i][1] - list_balls[j][1])
+            plt.text((list_balls[i][0] + list_balls[j][0])/2, (list_balls[i][1] + list_balls[j][1])/2, str(value))
 
-    return 0
+    return G,robot,list_balls
 
 
 if __name__ == "__main__":
-    read_world_file(
-        30, '/home/geekboyboss/Tennis-ball-gathering-robot/terrain.csv')
+    N = 30
+    G = read_world_file(
+        N, '/home/geekboyboss/Tennis-ball-gathering-robot/terrain.csv')
+
+    plt.legend()
+    plt.show()
