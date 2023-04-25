@@ -42,7 +42,7 @@ def init_world(n, filename):
             if name == 'R':
                 x, y = map(int, coords[1:-1].split(','))
                 plt.plot(x, y, marker="o", label='robot')
-                robot = robot((x, y), 0, 4, 0, 0)
+                robot = robot((x, y), 0, 4,0)
 
             elif name.isdigit():
                 x, y = map(int, coords[1:-1].split(','))
@@ -57,10 +57,10 @@ def init_world(n, filename):
 
     for i in range(len(list_balls)):
 
-        x_values.append(list_balls[i][0])
-        y_values.append(list_balls[i][1])
+        x_values=list_balls[i][0]
+        y_values=list_balls[i][1]
 
-        plt.plot(x_values, y_values, 'b-')
+        plt.plot([x_values,robot.position[0]], [y_values,robot.position[1]], 'b-')
 
         for j in range(len(list_balls)):
             if j != i:
