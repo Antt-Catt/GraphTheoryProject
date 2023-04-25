@@ -42,7 +42,7 @@ def init_world(n, filename):
             if name == 'R':
                 x, y = map(int, coords[1:-1].split(','))
                 plt.plot(x, y, marker="o", label='robot')
-                robot = robot((x, y), 0, 4, 0, 0)
+                robot = robot((x, y), 0, 4, 0)
 
             elif name.isdigit():
                 x, y = map(int, coords[1:-1].split(','))
@@ -52,18 +52,22 @@ def init_world(n, filename):
 
     print("World generated : Number of balls to pick : " + str(len(list_balls)))
 
-    x_values = []
-    y_values = []
-
     for i in range(len(list_balls)):
 
-        x_values.append(list_balls[i][0])
-        y_values.append(list_balls[i][1])
+        x_values = robot.position[0], list_balls[i][0]
+        y_values = robot.position[1], list_balls[i][1]
 
         plt.plot(x_values, y_values, 'b-')
 
         for j in range(len(list_balls)):
+
             if j != i:
+
+                x_values = list_balls[i][0], list_balls[j][0]
+                y_values = list_balls[i][1], list_balls[j][1]
+
+                plt.plot(x_values, y_values, 'b-')
+
                 value = abs(list_balls[i][0] - list_balls[j][0]) + abs(list_balls[i][1] - list_balls[j][1])
                 plt.text((list_balls[i][0] + list_balls[j][0]) / 2, (list_balls[i][1] + list_balls[j][1]) / 2, str(value))
 
@@ -73,9 +77,8 @@ def init_world(n, filename):
 
 
 if __name__ == "__main__":
-    N = 30
-    G = init_world(
-        N, '/home/geekboyboss/Tennis-ball-gathering-robot/terrain.csv')
+    n = 30
+    G = init_world(n, 'terrain.csv')
 
     plt.legend()
     plt.show()
