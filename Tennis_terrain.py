@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 
-class robot:
+class Robot:
     def __init__(self, position, direction, mv_speed, rot_speed):
         self.position = position
         self.direction = direction
@@ -43,44 +43,49 @@ def init_world(n, filename):
                 x, y = map(int, coords[1:-1].split(','))
                 plt.plot(x, y, marker="o", label='robot')
 
-                robot = robot((x, y), 0, 4, 0)
-
+                robot = Robot((x, y), 0, 4, 0)
 
             elif name.isdigit():
                 x, y = map(int, coords[1:-1].split(','))
                 plt.plot(x, y, marker="o", label='ball')
                 size += 1
-                list_balls.append((x, y))
+                list_balls.append(np.array([x, y]))
 
     print("World generated : Number of balls to pick : " + str(len(list_balls)))
 
     for i in range(len(list_balls)):
 
-        x_values = robot.position[0], list_balls[i][0]
-        y_values = robot.position[1], list_balls[i][1]
+        x_values = [robot.position[0], list_balls[i][0]]
+        y_values = [robot.position[1], list_balls[i][1]]
 
-        plt.plot([x_values,robot.position[0]], [y_values,robot.position[1]], 'b-')
+        plt.plot(x_values, y_values, 'b-')
 
         for j in range(len(list_balls)):
 
             if j != i:
 
-                x_values = list_balls[i][0], list_balls[j][0]
-                y_values = list_balls[i][1], list_balls[j][1]
+                x_values = [list_balls[i][0], list_balls[j][0]]
+                y_values = [list_balls[i][1], list_balls[j][1]]
 
                 plt.plot(x_values, y_values, 'b-')
 
-                value = abs(list_balls[i][0] - list_balls[j][0]) + abs(list_balls[i][1] - list_balls[j][1])
-                plt.text((list_balls[i][0] + list_balls[j][0]) / 2, (list_balls[i][1] + list_balls[j][1]) / 2, str(value))
+                value = abs(list_balls[i][0] - list_balls[j][0]) + \
+                    abs(list_balls[i][1] - list_balls[j][1])
+                plt.text((list_balls[i][0] + list_balls[j][0]) / 2,
+                         (list_balls[i][1] + list_balls[j][1]) / 2, str(value))
 
-    G = np.zeros((size, size))
-
+    G = np.zeros((size, size, size))
+    for layer in range(len(G)):
+        for i in range(len(G[0])):
+            for j in range(len(G[0])):
+                if i != j:
+                    G[layer][i][j] = -1
     return G, robot, list_balls
 
 
 if __name__ == "__main__":
     n = 30
-    G = init_world(n, 'terrain.csv')
+    G, robot, list_balls = init_world(n, 'terrain.csv')
 
     plt.legend()
     plt.show()
