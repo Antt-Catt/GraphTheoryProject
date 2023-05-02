@@ -60,7 +60,7 @@ def init_world(filename, n=30, mv=2, rot=3):
 
 
 # Print a world
-def print_world(graph, robot, list_balls, previous,frompoint):
+def print_world(graph, robot, list_balls, passed_balls,previous,frompoint):
     list_balls=list_balls+[robot.position]
     if(frompoint >= len(list_balls)):
         plt.plot(robot.position[0], robot.position[1], marker="o", label='robot')
@@ -78,7 +78,14 @@ def print_world(graph, robot, list_balls, previous,frompoint):
 
         x_values = [startpos[0], list_balls[i][0]]
         y_values = [startpos[1], list_balls[i][1]]
-        if i==previous:
+        appartenance=[(list_balls[i]==x).all() for x in passed_balls]
+        value=True
+        for bool in appartenance:
+            if bool==False:
+                value=False
+                break
+        
+        if i==frompoint or value:# or (list_balls[i] in passed_balls).all():
             continue
         plt.plot(x_values, y_values, 'b-')
 
