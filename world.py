@@ -60,11 +60,14 @@ def init_world(filename, n, mv, rot):
 
 
 # Print a world
-def print_world(G, robot, list_balls, frompoint):
+def print_world(graph, robot, list_balls, frompoint):
 
-    # Print robot
-    plt.plot(robot.position[0], robot.position[1], marker="o", label='robot')
-    plt.text(robot.position[0] + 0.5, robot.position[1] + 0.5, str(len(list_balls)))
+    if(frompoint >= len(list_balls)):
+        plt.plot(robot.position[0], robot.position[1], marker="o", label='robot')
+        plt.text(robot.position[0] + 0.5, robot.position[1] + 0.5, str(len(list_balls)))
+        startpos = robot.position
+    else:
+        startpos = list_balls[frompoint]
 
     # ¨Print each ball and weight between
     for i in range(len(list_balls)):
@@ -72,8 +75,8 @@ def print_world(G, robot, list_balls, frompoint):
         plt.plot(list_balls[i][0], list_balls[i][1], marker="o", label='ball')
         plt.text(list_balls[i][0] + 0.5, list_balls[i][1] + 0.5, i)
 
-        x_values = [robot.position[0], list_balls[i][0]]
-        y_values = [robot.position[1], list_balls[i][1]]
+        x_values = [startpos[0], list_balls[i][0]]
+        y_values = [startpos[1], list_balls[i][1]]
 
         plt.plot(x_values, y_values, 'b-')
 
@@ -81,14 +84,12 @@ def print_world(G, robot, list_balls, frompoint):
 
             if j != i:
 
-                x_values = [list_balls[i][0], list_balls[j][0]]
-                y_values = [list_balls[i][1], list_balls[j][1]]
+                #x_values = [list_balls[i][0], list_balls[j][0]]
+                #y_values = [list_balls[i][1], list_balls[j][1]]
 
-                plt.plot(x_values, y_values, 'b-')
+                #plt.plot(x_values, y_values, 'b-')
 
-                mat = init_graph(list_balls)
-
-                val = mat[frompoint][i][j]
+                val = graph[frompoint][i][j]
                 plt.text((list_balls[i][0] + list_balls[j][0]) / 2, (list_balls[i][1] + list_balls[j][1]) / 2, str(val))
 
     # Launch print
