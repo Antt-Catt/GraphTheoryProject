@@ -1,5 +1,6 @@
 from graph import *
 from world import *
+from project import *
 import sys
 
 if __name__ == "__main__":
@@ -12,8 +13,11 @@ if __name__ == "__main__":
         print("To much arguments (1- world filename, 2- world size, 3- robot mv_speed, 4- robot rot_speed)")
         exit(1)
 
-    robot, list_balls = init_world(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4]))
+    robot, list_balls = init_world(sys.argv[1], int(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4]))
 
-    graph = init_graph(list_balls+[robot.position])
+    graph = init_graph(list_balls + [robot.position], robot)
     print(len(list_balls), len(graph))
-    print_world(graph, robot, list_balls, 0,len(list_balls))
+    passed_balls=[np.array([robot.position[0],robot.position[1]-0.5])]
+    #print_world(graph, robot, list_balls,passed_balls, previous=0, frompoint=len(list_balls))
+    path=path_opt(graph, list_balls, robot)
+    print_path(path)
