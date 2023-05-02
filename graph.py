@@ -2,7 +2,16 @@ from Tennis_terrain import *
 import numpy as np
 
 # Initializes the graph
-def init_graph(graph, list_nodes):
+def init_graph(list_nodes):
+    size=len(list_nodes)
+    graph = np.zeros((size, size, size))
+    for layer in range(len(graph)):
+        for i in range(len(graph[0])):
+            for j in range(len(graph[0])):
+                if i != j:
+                    graph[layer][i][j] = -1
+
+
     # setting line and collumn to zero
     for layer in range(len(graph)):
         for i in range(len(graph[0])):
@@ -32,6 +41,10 @@ def weight(previous_node,current_node,future_node,list_nodes):
     bc = c - b
 
     cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
+    if(cosine_angle>1):
+        cosine_angle=1
+    elif(cosine_angle<-1):
+        cosine_angle=-1
     angle = np.arccos(cosine_angle)
     #print(np.degrees(angle))
     
@@ -42,8 +55,8 @@ def weight(previous_node,current_node,future_node,list_nodes):
 
 if __name__ == "__main__":
     n = 30
-    G, robot, list_balls = init_world('terrain.csv', n, 4, 0)
-    init_graph(G, list_balls)
+    graph, robot, list_balls = init_world('terrain.csv', n, 4, 0)
+    init_graph(graph, list_balls)
     #print(list_balls)
     weight(0,1,3,list_balls)
 

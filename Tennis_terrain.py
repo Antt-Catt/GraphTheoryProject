@@ -96,8 +96,6 @@ def print_world(G, robot, list_balls, frompoint):
                 val = mat[frompoint][i][j]
                 plt.text((list_balls[i][0] + list_balls[j][0]) / 2, (list_balls[i][1] + list_balls[j][1]) / 2, str(val))
 
-
-
     plt.legend()
     plt.show()
 
