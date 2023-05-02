@@ -5,21 +5,20 @@ import numpy as np
 def init_graph(graph, list_nodes):
     # setting line and collumn to zero
     for layer in range(len(graph)):
-        for i in range(len(G[0])):
-            for j in range(len(G[0])):
+        for i in range(len(graph[0])):
+            for j in range(len(graph[0])):
                 if i==layer or j==layer:
                     graph[layer][i][j]=0
     #print(graph)
 
     # filling the graph with angles
     for layer in range(len(graph)):
-        for i in range(len(G[0])):
-            for j in range(len(G[0])):
+        for i in range(len(graph[0])):
+            for j in range(len(graph[0])):
                 if layer != i and i != j and layer != j :
                     if graph[layer][i][j] == -1:
                         #print(layer,i,j,"for angle",weight(layer,i,j,list_nodes))
                         graph[layer][i][j]=weight(layer,i,j,list_nodes)
-    print(graph)
     return graph
 
 # Calculate the time it takes to go from current to future node coming from previous node.
@@ -43,7 +42,7 @@ def weight(previous_node,current_node,future_node,list_nodes):
 
 if __name__ == "__main__":
     n = 30
-    G, robot, list_balls = init_world(n, 'terrain.csv')
+    G, robot, list_balls = init_world('terrain.csv', n, 4, 0)
     init_graph(G, list_balls)
     #print(list_balls)
     weight(0,1,3,list_balls)

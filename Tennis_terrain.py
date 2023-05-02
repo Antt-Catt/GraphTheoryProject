@@ -14,7 +14,7 @@ class Robot:
             self.direction) + " at a mv speed " + str(self.mv_speed) + " and rot speed " + str(self.rot_speed)
 
 
-def init_world(n, filename):
+def init_world(filename, n, mv, rot):
 
     global robot
 
@@ -43,7 +43,7 @@ def init_world(n, filename):
                 x, y = map(int, coords[1:-1].split(','))
                 plt.plot(x, y, marker="o", label='robot')
 
-                robot = Robot((x, y), 0, 4, 0)
+                robot = Robot([x, y], 0, mv, rot)
 
             elif name.isdigit():
                 x, y = map(int, coords[1:-1].split(','))
@@ -85,7 +85,7 @@ def init_world(n, filename):
 
 if __name__ == "__main__":
     n = 30
-    G, robot, list_balls = init_world(n, 'terrain.csv')
+    G, robot, list_balls = init_world('terrain.csv', n, 4, 2)
 
     plt.legend()
     plt.show()
