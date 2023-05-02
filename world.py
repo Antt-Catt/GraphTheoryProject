@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-from graph import *
+from graph import init_graph
 import numpy as np
 
 # Class representing the robot
@@ -16,7 +16,7 @@ class Robot:
 
 
 # Initialize world
-def init_world(filename, n=50, mv=2, rot=3):
+def init_world(filename, n=30, mv=2, rot=3):
 
     global robot
 
@@ -86,7 +86,7 @@ def print_world(G, robot, list_balls, frompoint):
 
                 plt.plot(x_values, y_values, 'b-')
 
-                mat = init_graph(list_balls)
+                mat = G#init_graph(list_balls)
 
                 val = mat[frompoint][i][j]
                 plt.text((list_balls[i][0] + list_balls[j][0]) / 2, (list_balls[i][1] + list_balls[j][1]) / 2, str(val))
