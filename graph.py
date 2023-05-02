@@ -46,7 +46,7 @@ def weight(previous_node, current_node, future_node, list_nodes, robot):
     b = list_nodes[current_node]
     c = list_nodes[future_node]
 
-    ba = a - b
+    ba = b - a
     bc = c - b
 
     cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
