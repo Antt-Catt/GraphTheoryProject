@@ -98,7 +98,7 @@ if __name__ == "__main__":
     from world import *
     robot, list_balls = init_world("terrain.csv")
 
-    graph = init_graph(list_balls)
+    graph = init_graph(list_balls+[robot.position])
 
     print(graph)
     print("This file is not runable\n")
