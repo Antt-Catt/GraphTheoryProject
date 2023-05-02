@@ -77,18 +77,13 @@ def init_world(filename, n, mv, rot):
                 plt.text((list_balls[i][0] + list_balls[j][0]) / 2,
                          (list_balls[i][1] + list_balls[j][1]) / 2, str(value))
 
-    G = np.zeros((size, size, size))
-    for layer in range(len(G)):
-        for i in range(len(G[0])):
-            for j in range(len(G[0])):
-                if i != j:
-                    G[layer][i][j] = -1
-    return G, robot, list_balls
+
+    return robot, list_balls
 
 
 if __name__ == "__main__":
     n = 30
-    G, robot, list_balls = init_world('terrain.csv', n, 4, 2)
+    robot, list_balls = init_world('terrain.csv', n, 4, 2)
 
     plt.legend()
     plt.show()
