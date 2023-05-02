@@ -1,4 +1,5 @@
 from matplotlib import pyplot as plt
+from graph import *
 import numpy as np
 
 
@@ -41,11 +42,10 @@ def init_world(filename, n, mv, rot):
 
             if name == 'R':
                 x, y = map(int, coords[1:-1].split(','))
-                plt.plot(x, y, marker="o", label='robot')
+                #plt.plot(x, y, marker="o", label='robot')
 
                 robot = Robot([x, y], 0, mv, rot)
-                plt.text(x+0.5,y+0.5,str(size))
-                size+=1
+                #plt.text(x+0.5,y+0.5,str(size))
 
             elif name.isdigit():
                 x, y = map(int, coords[1:-1].split(','))
@@ -56,7 +56,26 @@ def init_world(filename, n, mv, rot):
 
     print("World generated : Number of balls to pick : " + str(len(list_balls)))
 
+    G = np.zeros((size, size, size))
+    for layer in range(len(G)):
+        for i in range(len(G[0])):
+            for j in range(len(G[0])):
+                if i != j:
+                    G[layer][i][j] = -1
+    return G, robot, list_balls
+
+
+# Print a world
+def print_world(G, robot, list_balls, frompoint):
+
+    plt.plot(robot.position[0], robot.position[1], marker="o", label='robot')
+    plt.text(robot.position[0] + 0.5, robot.position[1] + 0.5, str(len(list_balls)))
+
+
     for i in range(len(list_balls)):
+
+        plt.plot(list_balls[i][0], list_balls[i][1], marker="o", label='ball')
+        plt.text(list_balls[i][0] + 0.5, list_balls[i][1] + 0.5, i)
 
         x_values = [robot.position[0], list_balls[i][0]]
         y_values = [robot.position[1], list_balls[i][1]]
@@ -72,23 +91,17 @@ def init_world(filename, n, mv, rot):
 
                 plt.plot(x_values, y_values, 'b-')
 
-                value = abs(list_balls[i][0] - list_balls[j][0]) + \
-                    abs(list_balls[i][1] - list_balls[j][1])
-                plt.text((list_balls[i][0] + list_balls[j][0]) / 2,
-                         (list_balls[i][1] + list_balls[j][1]) / 2, str(value))
+                mat = init_graph(G, list_balls)
 
-    G = np.zeros((size, size, size))
-    for layer in range(len(G)):
-        for i in range(len(G[0])):
-            for j in range(len(G[0])):
-                if i != j:
-                    G[layer][i][j] = -1
-    return G, robot, list_balls
+                val = mat[frompoint][i][j]
+                plt.text((list_balls[i][0] + list_balls[j][0]) / 2, (list_balls[i][1] + list_balls[j][1]) / 2, str(val))
 
+
+
+    plt.legend()
+    plt.show()
 
 if __name__ == "__main__":
     n = 30
     G, robot, list_balls = init_world('terrain.csv', n, 4, 2)
-
-    plt.legend()
-    plt.show()
+    print_world(G, robot, list_balls, len(G) - 1)

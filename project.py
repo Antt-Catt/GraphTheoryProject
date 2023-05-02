@@ -42,6 +42,7 @@ def path_opt(graph, list_balls, robot):
     return path_min
 
 if __name__ == "__main__":
+
     if len(sys.argv) < 5:
         print("Missing arguments (1- world filename, 2- world size, 3- robot mv_speed, 4- robot rot_speed)")
         exit(1)
@@ -50,11 +51,9 @@ if __name__ == "__main__":
         print("To much arguments (1- world filename, 2- world size, 3- robot mv_speed, 4- robot rot_speed)")
         exit(1)
 
-    data = init_world(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4]))
+    G, robot, list_balls = init_world(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4]))
 
-    list_balls = data[2]
-    graph = init_graph(data[0], list_balls)
-    robot = data[1]
+    graph = init_graph(G, list_balls)
 
     path_opt(graph, list_balls, robot)
 
