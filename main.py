@@ -16,4 +16,8 @@ if __name__ == "__main__":
 
     graph = init_graph(list_balls+[robot.position])
     print(len(list_balls), len(graph))
+    
     print_world(graph, robot, list_balls, 0,len(list_balls))
+
+
+    
