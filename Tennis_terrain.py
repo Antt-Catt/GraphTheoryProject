@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-from graph import *
+from graph import init_graph
 import numpy as np
 
 
@@ -56,13 +56,8 @@ def init_world(filename, n, mv, rot):
 
     print("World generated : Number of balls to pick : " + str(len(list_balls)))
 
-    G = np.zeros((size, size, size))
-    for layer in range(len(G)):
-        for i in range(len(G[0])):
-            for j in range(len(G[0])):
-                if i != j:
-                    G[layer][i][j] = -1
-    return G, robot, list_balls
+    
+    return robot, list_balls
 
 
 # Print a world
@@ -101,5 +96,5 @@ def print_world(G, robot, list_balls, frompoint):
 
 if __name__ == "__main__":
     n = 30
-    G, robot, list_balls = init_world('terrain.csv', n, 4, 2)
-    print_world(G, robot, list_balls, len(G) - 1)
+    robot, list_balls = init_world('terrain.csv', n, 4, 2)
+    

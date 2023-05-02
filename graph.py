@@ -55,9 +55,10 @@ def weight(previous_node,current_node,future_node,list_nodes):
 
 if __name__ == "__main__":
     n = 30
-    graph, robot, list_balls = init_world('terrain.csv', n, 4, 0)
-    init_graph(graph, list_balls)
+    robot, list_balls = init_world('terrain.csv', n, 4, 0)
+    G=init_graph(list_balls)
     #print(list_balls)
     weight(0,1,3,list_balls)
+    print_world(G, robot, list_balls, len(G) - 1)
 
 
