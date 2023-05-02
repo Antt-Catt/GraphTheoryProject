@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-from graph import init_graph
+from graph import *
 import numpy as np
 
 # Class representing the robot
@@ -16,7 +16,7 @@ class Robot:
 
 
 # Initialize world
-def init_world(filename, n, mv, rot):
+def init_world(filename, n=50, mv=2, rot=3):
 
     global robot
 
