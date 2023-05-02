@@ -44,10 +44,13 @@ def init_world(filename, n, mv, rot):
                 plt.plot(x, y, marker="o", label='robot')
 
                 robot = Robot([x, y], 0, mv, rot)
+                plt.text(x+0.5,y+0.5,str(size))
+                size+=1
 
             elif name.isdigit():
                 x, y = map(int, coords[1:-1].split(','))
                 plt.plot(x, y, marker="o", label='ball')
+                plt.text(x+0.5,y+0.5,str(size))
                 size += 1
                 list_balls.append(np.array([x, y]))
 
