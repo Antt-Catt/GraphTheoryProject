@@ -95,6 +95,5 @@ def print_world(G, robot, list_balls, frompoint):
     plt.show()
 
 if __name__ == "__main__":
-    n = 30
-    robot, list_balls = init_world('terrain.csv', n, 4, 2)
+    print("This file is not runable\n")
     

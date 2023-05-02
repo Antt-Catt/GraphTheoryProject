@@ -1,5 +1,6 @@
-from Tennis_terrain import *
+from world import *
 import numpy as np
+import itertools
 
 # Initializes the graph
 def init_graph(list_nodes):
@@ -53,12 +54,45 @@ def weight(previous_node,current_node,future_node,list_nodes):
     return np.degrees(angle)+distance
 
 
+def path_opt(graph, list_balls, robot):
+    init_pos = robot.position
+    perm = itertools.permutations(range(len(list_balls)))
+    weight_min = float('inf')
+    exceed_weight = False
+    list_balls.append(init_pos)
+
+    # for all possible paths (p is list of balls)
+    for p in perm:
+        p = list(p)
+        p.insert(0, len(list_balls) - 1)
+        p.insert(0, len(list_balls) - 1)
+        p.append(len(list_balls))
+
+        path = [init_pos]
+
+        weight = 0
+
+        # get total weight
+        # if weight > weight_min : STOP
+
+        for i in range(len(list_balls)):
+            # weight += graph[p[i]][p[i + 1]][p[i + 2]]
+            path.append(list_balls[i])
+            # print(i, p[i], p[i + 1], p[i + 2])
+
+            if weight > weight_min:
+                exceed_weight = True
+                break
+
+        if exceed_weight:
+            exceed_weight = False
+        else:
+            weight_min = weight
+            path_min = path.append(init_pos)
+
+    return path_min
+
 if __name__ == "__main__":
-    n = 30
-    robot, list_balls = init_world('terrain.csv', n, 4, 0)
-    G=init_graph(list_balls)
-    #print(list_balls)
-    weight(0,1,3,list_balls)
-    print_world(G, robot, list_balls, len(G) - 1)
+    print("This file is not runable\n")
 
 
