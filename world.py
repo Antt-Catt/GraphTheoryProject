@@ -16,7 +16,7 @@ class Robot:
 
 
 # Initialize world
-def init_world(filename, n, mv, rot):
+def init_world(filename, n=50, mv=2, rot=3):
 
     global robot
 
@@ -46,7 +46,7 @@ def init_world(filename, n, mv, rot):
             # Robot
             if name == 'R':
                 x, y = map(int, coords[1:-1].split(','))
-                robot = Robot([x, y], 0, mv, rot)
+                robot = Robot(np.array([x, y]), 0, mv, rot)
 
             # Ball
             elif name.isdigit():

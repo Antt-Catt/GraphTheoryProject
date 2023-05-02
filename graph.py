@@ -30,13 +30,12 @@ def init_graph(list_nodes):
                 if layer != i and i != j and layer != j:
                     if graph[layer][i][j] == -1:
                         graph[layer][i][j] = weight(layer, i, j, list_nodes)
-
+    print(graph)
     return graph
 
 
 # Calculate the time it takes to go from current to future node coming from previous node.
 def weight(previous_node, current_node, future_node, list_nodes):
-
     # calculate angle between 3 points a,b,c
     a = list_nodes[previous_node]
     b = list_nodes[current_node]
@@ -54,7 +53,7 @@ def weight(previous_node, current_node, future_node, list_nodes):
 
     # distance between current and future point
     distance = np.linalg.norm(bc)
-    return np.degrees(angle) + distance
+    return int(np.degrees(angle) + distance)
 
 
 def path_opt(graph, list_balls, robot):
@@ -62,6 +61,7 @@ def path_opt(graph, list_balls, robot):
     perm = itertools.permutations(range(len(list_balls)))
     weight_min = float('inf')
     exceed_weight = False
+    path_min = []
     list_balls.append(init_pos)
 
     # for all possible paths (p is list of balls)
@@ -69,32 +69,35 @@ def path_opt(graph, list_balls, robot):
         p = list(p)
         p.insert(0, len(list_balls) - 1)
         p.insert(0, len(list_balls) - 1)
-        p.append(len(list_balls))
+        p.append(len(list_balls) - 1)
 
         path = [init_pos]
-
+        
         weight = 0
 
         # get total weight
         # if weight > weight_min : STOP
-
         for i in range(len(list_balls)):
-            # weight += graph[p[i]][p[i + 1]][p[i + 2]]
+            weight += graph[p[i]][p[i + 1]][p[i + 2]]
             path.append(list_balls[i])
-            # print(i, p[i], p[i + 1], p[i + 2])
-
+            
             if weight > weight_min:
                 exceed_weight = True
                 break
-
+                
         if exceed_weight:
             exceed_weight = False
         else:
             weight_min = weight
-            path_min = path.append(init_pos)
+            path_min = path
 
     return path_min
 
 
 if __name__ == "__main__":
+    from world import *
+    robot, list_balls = init_world("terrain.csv")
+
+    graph = init_graph(list_balls)
     print("This file is not runable\n")
+

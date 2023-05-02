@@ -1,3 +1,4 @@
+from graph import *
 from world import *
 import sys
 
