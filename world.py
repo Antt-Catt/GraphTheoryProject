@@ -46,7 +46,7 @@ def init_world(filename, n=50, mv=2, rot=3):
             # Robot
             if name == 'R':
                 x, y = map(int, coords[1:-1].split(','))
-                robot = Robot([x, y], 0, mv, rot)
+                robot = Robot(np.array([x, y]), 0, mv, rot)
 
             # Ball
             elif name.isdigit():

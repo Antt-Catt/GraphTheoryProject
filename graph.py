@@ -61,6 +61,7 @@ def path_opt(graph, list_balls, robot):
     perm = itertools.permutations(range(len(list_balls)))
     weight_min = float('inf')
     exceed_weight = False
+    path_min = []
     list_balls.append(init_pos)
 
     # for all possible paths (p is list of balls)
@@ -68,29 +69,27 @@ def path_opt(graph, list_balls, robot):
         p = list(p)
         p.insert(0, len(list_balls) - 1)
         p.insert(0, len(list_balls) - 1)
-        p.append(len(list_balls))
+        p.append(len(list_balls) - 1)
 
         path = [init_pos]
-
+        
         weight = 0
 
         # get total weight
         # if weight > weight_min : STOP
-
         for i in range(len(list_balls)):
-            # weight += graph[p[i]][p[i + 1]][p[i + 2]]
+            weight += graph[p[i]][p[i + 1]][p[i + 2]]
             path.append(list_balls[i])
-            # print(i, p[i], p[i + 1], p[i + 2])
-
+            
             if weight > weight_min:
                 exceed_weight = True
                 break
-
+                
         if exceed_weight:
             exceed_weight = False
         else:
             weight_min = weight
-            path_min = path.append(init_pos)
+            path_min = path
 
     return path_min
 
