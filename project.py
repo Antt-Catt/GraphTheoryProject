@@ -1,4 +1,4 @@
-from Tennis_terrain import *
+from world import *
 from graph import *
 import sys
 import itertools

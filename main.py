@@ -15,10 +15,6 @@ if __name__ == "__main__":
     robot, list_balls = init_world(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4]))
 
     graph = init_graph(list_balls + [robot.position], robot)
-
-    print_world(graph, robot, list_balls, len(graph) - 2)
-
-    print(graph)
-    print(list_balls)
-
+    print(len(list_balls), len(graph))
+    print_world(graph, robot, list_balls, 0, len(list_balls))
     print(path_opt(graph, list_balls, robot))
