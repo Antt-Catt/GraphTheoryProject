@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-from graph import init_graph
+from graph import *
 import numpy as np
 
 # Class representing the robot
@@ -86,7 +86,7 @@ def print_world(G, robot, list_balls, frompoint):
 
                 plt.plot(x_values, y_values, 'b-')
 
-                mat = init_graph(G, list_balls)
+                mat = init_graph(list_balls)
 
                 val = mat[frompoint][i][j]
                 plt.text((list_balls[i][0] + list_balls[j][0]) / 2, (list_balls[i][1] + list_balls[j][1]) / 2, str(val))
