@@ -30,7 +30,7 @@ def init_graph(list_nodes):
                 if layer != i and i != j and layer != j:
                     if graph[layer][i][j] == -1:
                         graph[layer][i][j] = weight(layer, i, j, list_nodes)
-    print(graph)
+
     return graph
 
 
@@ -53,7 +53,7 @@ def weight(previous_node, current_node, future_node, list_nodes):
 
     # distance between current and future point
     distance = np.linalg.norm(bc)
-    return int(np.degrees(angle) + distance)
+    return int(angle + distance)
 
 
 def path_opt(graph, list_balls, robot):
@@ -100,5 +100,7 @@ if __name__ == "__main__":
     robot, list_balls = init_world("terrain.csv")
 
     graph = init_graph(list_balls)
+
+    print(graph)
     print("This file is not runable\n")
 
