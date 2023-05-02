@@ -33,6 +33,10 @@ def weight(previous_node,current_node,future_node,list_nodes):
     bc = c - b
 
     cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
+    if(cosine_angle>1):
+        cosine_angle=1
+    elif(cosine_angle<-1):
+        cosine_angle=-1
     angle = np.arccos(cosine_angle)
     #print(np.degrees(angle))
     
