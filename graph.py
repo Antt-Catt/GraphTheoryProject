@@ -21,7 +21,7 @@ def init_graph(list_nodes, robot):
         for i in range(len(graph[0])):
             for j in range(len(graph[0])):
                 if i == layer or j == layer:
-                    if i == (size - 1) or j == (size - 1):
+                    if (i == (size - 1) or j == (size - 1)) and i != j:
                         graph[layer][i][j] = weight((list_nodes[layer] - [0, 1]), i, j, list_nodes, robot) 
                     else:
                         graph[layer][i][j] = 0
@@ -49,6 +49,8 @@ def weight(previous_node, current_node, future_node, list_nodes, robot):
     ba = b - a
     bc = c - b
 
+    # print(np.linalg.norm(ba), np.linalg.norm(bc))
+
     cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
     if (cosine_angle > 1):
         cosine_angle = 1
@@ -73,8 +75,8 @@ def path_opt(graph, list_balls, robot):
     # for all possible paths (p is list idx of balls in list_balls)
     for p in perm:
         p = list(p)
-        p.insert(0, len(list_balls) - 1)
-        p.insert(0, len(list_balls) - 1)
+        p.insert(0, len(list_balls) - 1) # len(list_balls) - 1 is for init_pos (robot initial position)
+        p.insert(0, len(list_balls) - 1) # adding because we start from here and we have to finish here
         p.append(len(list_balls) - 1)
 
         path = [init_pos]
@@ -84,7 +86,7 @@ def path_opt(graph, list_balls, robot):
         # get total weight
         # if weight > weight_min : STOP
         for i in range(len(list_balls)):
-            weight += graph[p[i]][p[i + 1]][p[i + 2]]
+            weight += graph[p[i]][p[i + 1]][p[i + 2]] # weight of the edge for coming from p[i], is in p[i + 1] and going to p[i + 2]
             path.append(list_balls[p[i + 2]]) # + 2 because the first 2 idx are for init_pos
             
             if weight > weight_min:
