@@ -51,8 +51,22 @@ def init_world(filename, n=30, mv=2, rot=3):
             # Ball
             elif name.isdigit():
                 x, y = map(int, coords[1:-1].split(','))
-                list_balls.append(np.array([x, y]))
-                size += 1
+                new_ball = np.array([x, y])
+
+                # if balls not in world, and not in the list (avoid duplicates)
+                if np.all(new_ball <= np.array([n, n])) and not np.array_equal(new_ball, list_balls):
+                    list_balls.append(new_ball)
+                    size += 1
+
+    # if no instruction about the robot, place it at [n/2, n/2]
+    if 'robot' not in globals():
+        robot = Robot(np.array([n//2, n//2]), 0, mv, rot)
+
+    # delete balls at robot.position (zero time to pick up)
+    for b in list_balls:
+        if np.all(b == robot.position):
+            list_balls.remove(b)
+            print(b)
 
     print("World generated : Number of balls to pick : " + str(len(list_balls)))
 
