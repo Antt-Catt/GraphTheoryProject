@@ -2,7 +2,7 @@ all:exemple
 
 
 exemple:
-	python3 main.py terrain.csv 30 100 0.01
+	python3 main.py test.csv 50 1 100000000000000000
 
 graph:
 	python3 graph.py

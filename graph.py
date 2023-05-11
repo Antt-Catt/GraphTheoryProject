@@ -70,37 +70,42 @@ def path_opt(graph, list_balls, robot):
     exceed_weight = False
     path_min = []
     list_balls.append(init_pos)
+    list_balls.append(np.array([init_pos[0], init_pos[1] - 0.5]))
 
     # for all possible paths (p is list idx of balls in list_balls)
     for p in perm:
         p = list(p)
-        # len(list_balls) - 1 is for init_pos (robot initial position)
-        p.insert(0, len(list_balls) - 1)
+        # len(list_balls) - 2 is for init_pos (robot initial position)
+        p.insert(0, len(list_balls) - 2)
         # adding because we start from here and we have to finish here
-        p.insert(0, len(list_balls) - 1)
-        p.append(len(list_balls) - 1)
+        p.insert(0, len(list_balls) - 2)
+        p.append(len(list_balls) - 2)
 
         path = [init_pos]
 
-        weight = 0
+        sum_weight = 0
 
         # get total weight
         # if weight > weight_min : STOP
-        for i in range(len(list_balls)):
-            # weight of the edge for coming from p[i], is in p[i + 1] and going to p[i + 2]
-            weight += graph[p[i]][p[i + 1]][p[i + 2]]
+        for i in range(len(list_balls) - 1):
+            # print(sum_weight)
+            if i == 0:
+                sum_weight = weight(len(list_balls) - 1, len(list_balls) - 2, p[i + 2], list_balls, robot)
+            # # weight of the edge for coming from p[i], is in p[i + 1] and going to p[i + 2]
+            else:
+                sum_weight += graph[p[i]][p[i + 1]][p[i + 2]]
             # + 2 because the first 2 idx are for init_pos
             path.append(list_balls[p[i + 2]])
 
-            if weight > weight_min:
+            if sum_weight > weight_min:
                 exceed_weight = True
                 break
 
-        if exceed_weight:
-            exceed_weight = False
-        else:
-            weight_min = weight
+        if not exceed_weight:
+            weight_min = sum_weight
             path_min = path
+
+        exceed_weight = False
 
     print(weight_min)
     return path_min
@@ -127,7 +132,7 @@ def shortest_path(graph, list_balls, robot):
                          2, i, list_nodes, robot)
             (previous, current, next) = (
                 len(list_nodes) - 1, len(list_nodes) - 2, i)
-            sum += min
+    sum += min
 
     passed_balls.append(init_pos)
     already_chosen_balls.append(current)
@@ -145,11 +150,12 @@ def shortest_path(graph, list_balls, robot):
                 if weights[i] < min:
                     min = weights[i]
                     goto_node = i
-                    sum += min
+        sum += min
 
         (previous, current, next) = (current, next, goto_node)
         already_chosen_balls.append(next)
 
+    sum += weight(current, next, already_chosen_balls[0], list_nodes, robot)
     already_chosen_balls.append(already_chosen_balls[0])
     path_min = [list_nodes[i]
                 for i in already_chosen_balls]  # Construct the minimum path
