@@ -2,10 +2,11 @@ import numpy as np
 import itertools
 
 
+
 # Initializes the graph
 def init_graph(list_nodes, robot):
-    
-    list_nodes=list_nodes+[robot.position]
+
+    list_nodes = list_nodes+[robot.position]
     size = len(list_nodes)
 
     # First fill with zeros
@@ -23,8 +24,9 @@ def init_graph(list_nodes, robot):
         for i in range(len(graph[0])):
             for j in range(len(graph[0])):
                 if i == layer or j == layer:
-                    if (i == (size - 1) or j == (size - 1)) and i != j:
-                        graph[layer][i][j] = weight((list_nodes[layer] - [0, 1]), i, j, list_nodes, robot) 
+                    if (i == (size - 1) or j == (size - 1)):
+                        # graph[layer][i][j] = weight((list_nodes[layer] - [0, 1]), i, j, list_nodes, robot)
+                        graph[layer][i][j] = 0
                     else:
                         graph[layer][i][j] = 0
 
@@ -34,7 +36,9 @@ def init_graph(list_nodes, robot):
             for j in range(len(graph[0])):
                 if layer != i and i != j and layer != j:
                     if graph[layer][i][j] == -1:
-                        graph[layer][i][j] = weight(layer, i, j, list_nodes, robot)
+                        graph[layer][i][j] = weight(
+                            layer, i, j, list_nodes, robot)
+
     return graph
 
 
@@ -44,7 +48,7 @@ def weight(previous_node, current_node, future_node, list_nodes, robot):
     if isinstance(previous_node, int):
         a = list_nodes[previous_node]
     else:
-        a = previous_node 
+        a = previous_node
     b = list_nodes[current_node]
     c = list_nodes[future_node]
 
@@ -77,56 +81,91 @@ def path_opt(graph, list_balls, robot):
     # for all possible paths (p is list idx of balls in list_balls)
     for p in perm:
         p = list(p)
-        p.insert(0, len(list_balls) - 1) # len(list_balls) - 1 is for init_pos (robot initial position)
-        p.insert(0, len(list_balls) - 1) # adding because we start from here and we have to finish here
+        # len(list_balls) - 1 is for init_pos (robot initial position)
+        p.insert(0, len(list_balls) - 1)
+        # adding because we start from here and we have to finish here
+        p.insert(0, len(list_balls) - 1)
         p.append(len(list_balls) - 1)
 
         path = [init_pos]
-        
+
         weight = 0
 
         # get total weight
         # if weight > weight_min : STOP
         for i in range(len(list_balls)):
-            weight += graph[p[i]][p[i + 1]][p[i + 2]] # weight of the edge for coming from p[i], is in p[i + 1] and going to p[i + 2]
-            path.append(list_balls[p[i + 2]]) # + 2 because the first 2 idx are for init_pos
-            
+            # weight of the edge for coming from p[i], is in p[i + 1] and going to p[i + 2]
+            weight += graph[p[i]][p[i + 1]][p[i + 2]]
+            # + 2 because the first 2 idx are for init_pos
+            path.append(list_balls[p[i + 2]])
+
             if weight > weight_min:
                 exceed_weight = True
                 break
-                
+
         if exceed_weight:
             exceed_weight = False
         else:
             weight_min = weight
             path_min = path
+            
 
+    print(weight_min)
     return path_min
 
 
 def shortest_path(graph, list_balls, robot):
-    path_min=[]
+    path_min = []
     init_pos = robot.position
-    passed_balls=[]
-    layer_selector=len(list_balls)
-    while(len(passed_balls)<len(list_balls)):
-        layer=graph[layer_selector]
+    list_nodes = list_balls+[init_pos] + \
+        [np.array([init_pos[0], init_pos[1]-0.5])]
+    passed_balls = [np.array([init_pos[0], init_pos[1]-0.5])]
+    already_chosen_balls = []
+    (previous, current, next) = (-1, -1, -1)
+
+    sum=0
+
+    min = float('inf')
+    for i in range(len(list_balls)):
+        # print(i,"is",weight(len(list_nodes)-1,len(list_nodes)-2,i,list_nodes,robot))
+        if (weight(len(list_nodes)-1, len(list_nodes)-2, i, list_nodes, robot) < min):
+            min = weight(len(list_nodes)-1, len(list_nodes) -
+                         2, i, list_nodes, robot)
+            (previous, current, next) = (len(list_nodes)-1, len(list_nodes)-2, i)
+            sum+=min
+
+    passed_balls.append(init_pos)
+    already_chosen_balls.append(current)
+    already_chosen_balls.append(next)
+
+    goto_node = 0
+    while (len(already_chosen_balls)-1 < len(list_balls)):
+        #print("selecting in :",layer_selector)
+        layer = graph[current]
+        weights = layer[next]
+        min = float('inf')
+        for i in range(len(weights)-1):
+            if i not in already_chosen_balls:
+                if weights[i] < min:
+                    min = weights[i]
+                    goto_node = i
+                    sum+=min
+
+        (previous, current, next) = (current, next, goto_node)
+        already_chosen_balls.append(next)
 
 
-        path_min.append(list_balls[0][0])
-        passed_balls.append(list_balls[0][0])
+    already_chosen_balls.append(already_chosen_balls[0])
+    path_min=[list_nodes[i] for i in already_chosen_balls]
+    print(sum)
+    return path_min
 
-
-    return path_min.append(init_pos)
 
 if __name__ == "__main__":
     from world import *
-    robot, list_balls = init_world("terrain.csv")
 
+    robot,list_balls=init_world("terrain.csv")
     graph = init_graph(list_balls,robot)
-
-    passed_balls=[np.array([robot.position[0],robot.position[1]-0.5])]
-    print_world(graph,robot,list_balls,passed_balls,0,len(list_balls))
-
-    print(shortest_path(graph,list_balls,robot))
+    path=shortest_path(graph,list_balls,robot)
+    print(path)
     print("This file is not runable\n")
