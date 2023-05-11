@@ -14,11 +14,13 @@ if __name__ == "__main__":
         exit(1)
 
     robot, list_balls = init_world(sys.argv[1], int(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4]))
+    graph = init_graph(list_balls, robot)
 
-    graph = init_graph(list_balls + [robot.position], robot)
     print(len(list_balls), len(graph))
+
     passed_balls=[np.array([robot.position[0],robot.position[1]-0.5])]
+
     print_world(graph, robot, list_balls,passed_balls, previous=0, frompoint=len(list_balls))
-    path=path_opt(graph, list_balls, robot)
-    print(path)f
+
+    path = path_opt(graph, list_balls, robot)
     print_path(path)

@@ -4,8 +4,10 @@ import itertools
 
 # Initializes the graph
 def init_graph(list_nodes, robot):
-    size = len(list_nodes)
     
+    list_nodes=list_nodes+[robot.position]
+    size = len(list_nodes)
+
     # First fill with zeros
     graph = np.zeros((size, size, size))
 
@@ -100,11 +102,29 @@ def path_opt(graph, list_balls, robot):
     return path_min
 
 
+def shortest_path(graph, list_balls, robot):
+    path_min=[]
+    init_pos = robot.position
+    passed_balls=[]
+    layer_selector=len(list_balls)
+    while(len(passed_balls)<len(list_balls)):
+        layer=graph[layer_selector]
+
+
+        path_min.append(list_balls[0][0])
+        passed_balls.append(list_balls[0][0])
+
+
+    return path_min.append(init_pos)
+
 if __name__ == "__main__":
     from world import *
     robot, list_balls = init_world("terrain.csv")
 
-    graph = init_graph(list_balls+[robot.position])
+    graph = init_graph(list_balls,robot)
 
-    print(graph)
+    passed_balls=[np.array([robot.position[0],robot.position[1]-0.5])]
+    print_world(graph,robot,list_balls,passed_balls,0,len(list_balls))
+
+    print(shortest_path(graph,list_balls,robot))
     print("This file is not runable\n")
