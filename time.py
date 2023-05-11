@@ -176,5 +176,6 @@ if __name__ == "__main__":
     plt.xlabel("Nombre de balles")
     plt.ylabel("Temps de calcul (en s)")
     plt.yscale("log")
+    plt.legend()
     plt.title("Temps de calcul du plus court chemin en fonction du nombre de balles à ramasser")
     plt.show()
