@@ -24,6 +24,6 @@ if __name__ == "__main__":
     print_world(graph, robot, list_balls, passed_balls,
                 previous=0, frompoint=len(list_balls))
 
-    path = path_opt(graph, list_balls, robot)
+    path = shortest_path(graph, list_balls, robot)
     print_path(path)
     
